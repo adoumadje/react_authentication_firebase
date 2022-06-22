@@ -7,7 +7,7 @@ export function useAuth() {
     return useContext(AuthContext)
 }
 
-const AuthProvider = ({children}) => {
+export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState()
 
     function signup(email, password) {
@@ -32,5 +32,3 @@ const AuthProvider = ({children}) => {
     </AuthContext.Provider>
   )
 }
-
-export default AuthProvider
