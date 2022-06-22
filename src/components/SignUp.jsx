@@ -1,18 +1,44 @@
-import React, {useRef} from 'react';
-import { Card, Form, Button } from 'react-bootstrap';
+import React, {useRef, useState} from 'react';
+import { Card, Form, Button, Alert } from 'react-bootstrap';
+import { useAuth } from '../contexts/AuthContext';
 
 
 const SignUp = () => {
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmRef = useRef();
+    const {signup, currentUser} = useAuth();
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+
+        if(passwordRef.current.value !==
+            passwordConfirmRef.current.value) {
+            return setError('Paswords do not match')
+        }
+
+        try {
+            setError('')
+            setLoading(true)
+            await signup(emailRef.current.value, passwordRef.current.value)
+        } catch {
+            setError('Failed to create an account')
+        }
+
+        setLoading(false)
+        signup(emailRef.current.value, passwordRef.current.value)
+    }
 
   return (
     <>
         <Card className='w-100'>
             <Card.Body>
                 <h2 className="text-center mb-4">Sign Up</h2>
-                <Form>
+                {JSON.stringify(currentUser)}
+                {error && <Alert variant='danger'>{error}</Alert>}
+                <Form onSubmit={handleSubmit}>
                     <Form.Group className='mb-2' id="email">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" ref={emailRef} required />
@@ -23,9 +49,9 @@ const SignUp = () => {
                     </Form.Group>
                     <Form.Group className='mb-2' id="password-confirm">
                         <Form.Label>Password Confirmation</Form.Label>
-                        <Form.Control type="email" ref={passwordConfirmRef} required />
+                        <Form.Control type="password" ref={passwordConfirmRef} required />
                     </Form.Group>
-                    <Button className="w-100 mt-3" type="submit">Sign Up</Button>
+                    <Button disabled={loading} className="w-100 mt-3" type="submit">Sign Up</Button>
                 </Form>
             </Card.Body>
         </Card>
