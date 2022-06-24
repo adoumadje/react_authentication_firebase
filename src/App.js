@@ -7,6 +7,7 @@ import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import { RequireAuth } from "./components/RequireAuth";
 import ForgotPassword from "./components/ForgotPassword";
+import UpdateProfil from "./components/UpdateProfil";
 
 const App = () => {
     return (
@@ -29,6 +30,14 @@ const App = () => {
                             <Route path="/signup" element={<SignUp />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/forgot-password" element={<ForgotPassword />} />
+                            <Route
+                                path="/update-profile"
+                                element={
+                                    <RequireAuth>
+                                        <UpdateProfil />
+                                    </RequireAuth>
+                                }
+                            />
                         </Routes>
                     </AuthProvider>
                 </BrowserRouter>
